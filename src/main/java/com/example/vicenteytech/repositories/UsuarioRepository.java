@@ -4,9 +4,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.vicenteytech.entities.Usuario;
+import com.example.vicenteytech.entities.UserModel;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+public interface UsuarioRepository extends JpaRepository<UserModel, Integer> {
 
-    Optional<Usuario> findByLogin(String email);
+    Optional<UserModel> findByEmail(String email);
 }

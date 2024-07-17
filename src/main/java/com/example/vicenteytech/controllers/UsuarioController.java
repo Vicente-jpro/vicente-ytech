@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.vicenteytech.dto.CredenciaisDTO;
 import com.example.vicenteytech.dto.TokenDTO;
-import com.example.vicenteytech.entities.Usuario;
+import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
 import com.example.vicenteytech.security.jwt.JwtService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
@@ -23,7 +23,7 @@ import com.example.vicenteytech.service.UsuarioServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UsuarioController {
 
@@ -33,9 +33,9 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario salvar( @RequestBody @Valid Usuario usuario ){
-        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaCriptografada);
+    public UserModel salvar( @RequestBody @Valid UserModel usuario ){
+        String senhaCriptografada = passwordEncoder.encode(usuario.getPassword());
+        usuario.setPassword(senhaCriptografada);
         return usuarioService.salvar(usuario);
     }
 
@@ -43,9 +43,9 @@ public class UsuarioController {
     public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais){
         try{
             
-            Usuario usuario = new Usuario();
+        	UserModel usuario = new UserModel();
                     usuario.setEmail(credenciais.getEmail());
-                    usuario.setSenha(credenciais.getSenha());
+                    usuario.setPassword(credenciais.getPassword());
             
             UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);
             String token = jwtService.gerarToken(usuario);

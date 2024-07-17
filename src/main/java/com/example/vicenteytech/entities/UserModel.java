@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Usuario {
     
     @Column(name = "passwrd")
     @NotEmpty(message = "Password can not be empty.")
-    private String senha;
+    private String password;
     
     @Column(name = "admin")
     private boolean admin;

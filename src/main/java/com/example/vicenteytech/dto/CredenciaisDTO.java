@@ -1,11 +1,17 @@
 package com.example.vicenteytech.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 public class CredenciaisDTO {
+	
+	@JsonProperty("email")
     private String email;
-    private String senha;
+    
+	@JsonProperty("password")
+	private String password;
 }

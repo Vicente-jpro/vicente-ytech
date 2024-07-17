@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.vicenteytech.entities.Usuario;
+import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
 import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.repositories.UsuarioRepository;
@@ -27,7 +27,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
     private UsuarioRepository repository;
 
     @Transactional
-    public Usuario salvar(Usuario usuario){
+    public UserModel salvar(UserModel usuario){
     	log.info("Salvando o usuario...");
     	try {
     		return repository.save(usuario);
@@ -38,9 +38,9 @@ public class UsuarioServiceImpl implements UserDetailsService {
     	
     }
 
-    public UserDetails autenticar( Usuario usuario ){
+    public UserDetails autenticar( UserModel usuario ){
         UserDetails user = loadUserByUsername(usuario.getEmail());
-        boolean senhasIguais = encoder.matches( usuario.getSenha(), user.getPassword() );
+        boolean senhasIguais = encoder.matches( usuario.getPassword(), user.getPassword() );
 
         if(senhasIguais){
             return user;
@@ -50,8 +50,8 @@ public class UsuarioServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = repository.findByLogin(username)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    	UserModel usuario = repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
         String[] roles = usuario.isAdmin() ?
@@ -60,7 +60,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
         return User
                 .builder()
                 .username(usuario.getEmail())
-                .password(usuario.getSenha())
+                .password(usuario.getPassword())
                 .roles(roles)
                 .build();
     }
