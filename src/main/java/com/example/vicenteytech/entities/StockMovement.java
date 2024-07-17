@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +28,8 @@ public class StockMovement {
 	@Column( name = "id")
 	private Long id;
 	
-	@Column(name = "name", unique = true)
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "creation_date", unique = true)
 	private LocalDate creationDate;
 
 	@Column(name = "quantity")

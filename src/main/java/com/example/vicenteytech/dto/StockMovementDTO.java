@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StockMovementRequestDTO {
+public class StockMovementDTO {
 
 	@JsonProperty("id")
 	private Long id;

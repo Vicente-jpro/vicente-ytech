@@ -5,7 +5,7 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.example.vicenteytech.dto.StockMovementRequestDTO;
+import com.example.vicenteytech.dto.StockMovementDTO;
 import com.example.vicenteytech.entities.Item;
 import com.example.vicenteytech.entities.StockMovement;
 import com.example.vicenteytech.exceptions.StockMovementException;
@@ -24,22 +24,22 @@ public class StockMovementService {
 	private final StockMovementRepository stockMovementRepository;
 	private final ModelMapper modelMapper;
 	
-	public StockMovement save(StockMovementRequestDTO stockMovementRequestDTO) {
+	public StockMovement save(StockMovementDTO stockMovementDTO) {
 		log.info("Saving StockMovement...");
 		
-		StockMovement stockMovement = modelMapper.map(stockMovementRequestDTO, StockMovement.class);
-		Item item = modelMapper.map(stockMovementRequestDTO.getItem(), Item.class);
+		StockMovement stockMovement = modelMapper.map(stockMovementDTO, StockMovement.class);
+		Item item = modelMapper.map(stockMovementDTO.getItem(), Item.class);
 		stockMovement.setItem(item);
 		return stockMovementRepository.save(stockMovement);
 		
 	}
 	
-	public StockMovement update(StockMovementRequestDTO stockMovementRequestDTO, Long idStock) {
+	public StockMovement update(StockMovementDTO stockMovementDTO, Long idStock) {
 		log.info("Updating StockMovement...");		
 		StockMovement stockMovementSaved = getStockMovementById(idStock);
-		stockMovementRequestDTO.setId(stockMovementSaved.getId());
+		stockMovementDTO.setId(stockMovementSaved.getId());
 		
-		return this.save(stockMovementRequestDTO);
+		return this.save(stockMovementDTO);
 	}
 	
 	public StockMovement getStockMovementById(Long idStock) {
