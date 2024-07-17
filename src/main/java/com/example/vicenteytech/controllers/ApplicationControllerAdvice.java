@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.vicenteytech.exceptions.EnderecoException;
-import com.example.vicenteytech.exceptions.RegraNegocioException;
+import com.example.vicenteytech.exceptions.ItemException;
 import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.util.ApiErrors;
 
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
 
-    @ExceptionHandler(RegraNegocioException.class)
+    @ExceptionHandler(ItemException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrors handleRegraNegocioException(RegraNegocioException ex){
+    public ApiErrors handleItemExceptionException(ItemException ex){
         String mensagemErro = ex.getMessage();
         return new ApiErrors(mensagemErro);
     }
