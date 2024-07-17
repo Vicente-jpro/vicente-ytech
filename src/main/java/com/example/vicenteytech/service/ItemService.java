@@ -1,8 +1,9 @@
 package com.example.vicenteytech.service;
 
+import java.util.NoSuchElementException;
+
 import javax.transaction.Transactional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.example.vicenteytech.entities.Item;
@@ -23,7 +24,14 @@ public class ItemService {
 	public Item salvar(Item item) {
 		log.info("Saving the item...");
 		
-		return itemRepositoy.save(item);
+		try {
+			return itemRepositoy.save(item);
+		} catch (Exception e) {
+
+			log.error("Item already registered.");
+			throw new ItemException("Item already registered.");
+		}
+		
 	}
 	
 	public Item update(Item item, Long idItem) {
@@ -38,13 +46,14 @@ public class ItemService {
 	public Item getItemById(Long idItem) {
 		log.info("Getting item with ID: {}", idItem);
 		
-		Item endereco = itemRepositoy.findById(idItem).get();
-		if(endereco == null) {
+		try {
+			return itemRepositoy.findById(idItem).get();
+		} catch (NoSuchElementException e) {
+
 			log.error("Item not found ID: {}", idItem);
 			throw new ItemException("Item not found.");
 		}
 		
-		return endereco;
 	}
 	
 	public void delete(Long idItem) {

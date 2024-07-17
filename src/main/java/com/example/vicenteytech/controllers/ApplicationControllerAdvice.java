@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.vicenteytech.exceptions.EnderecoException;
 import com.example.vicenteytech.exceptions.ItemException;
 import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.util.ApiErrors;
@@ -29,14 +28,7 @@ public class ApplicationControllerAdvice {
     public ApiErrors handleUsuarioException( UsuarioException ex ){
         return new ApiErrors(ex.getMessage());
     }
-    
-
-    @ExceptionHandler(EnderecoException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiErrors handleEnderecoException( EnderecoException ex ){
-        return new ApiErrors(ex.getMessage());
-    }
-    
+        
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
