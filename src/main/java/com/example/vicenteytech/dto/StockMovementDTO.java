@@ -2,6 +2,7 @@ package com.example.vicenteytech.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class StockMovementDTO {
 	@JsonProperty("id")
 	private Long id;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@JsonProperty("creation_date")
 	private LocalDate creationDate;
 	

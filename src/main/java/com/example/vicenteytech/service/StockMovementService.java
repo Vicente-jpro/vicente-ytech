@@ -1,5 +1,8 @@
 package com.example.vicenteytech.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -22,14 +25,23 @@ public class StockMovementService {
 	
 
 	private final StockMovementRepository stockMovementRepository;
+	private final ItemService itemService;
+	
 	private final ModelMapper modelMapper;
 	
 	public StockMovement save(StockMovementDTO stockMovementDTO) {
 		log.info("Saving StockMovement...");
 		
 		StockMovement stockMovement = modelMapper.map(stockMovementDTO, StockMovement.class);
-		Item item = modelMapper.map(stockMovementDTO.getItem(), Item.class);
+		Item item = itemService.getItemById(stockMovementDTO.getItem().getId());
 		stockMovement.setItem(item);
+		
+		String date = String.valueOf(stockMovementDTO.getCreationDate());
+		
+        LocalDate creationalDate = LocalDate.parse(date,
+        		DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        stockMovement.setCreationDate(creationalDate);
+        
 		return stockMovementRepository.save(stockMovement);
 		
 	}

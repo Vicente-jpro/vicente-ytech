@@ -28,7 +28,6 @@ public class StockMovement {
 	@Column( name = "id")
 	private Long id;
 	
-	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "creation_date", unique = true)
 	private LocalDate creationDate;
 
