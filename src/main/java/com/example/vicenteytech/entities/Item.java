@@ -1,7 +1,9 @@
 package com.example.vicenteytech.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -36,4 +39,8 @@ public class Item {
 	@JsonIgnore
 	@OneToMany( mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<StockMovement> stocks = new ArrayList<>();
+	
+	@ManyToMany(mappedBy = "items")
+	private Set<Order> orders = new HashSet<>();
+	
 }
