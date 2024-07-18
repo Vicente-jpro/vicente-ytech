@@ -14,40 +14,20 @@ Execute the jar file by running `java -jar ./target/vicente-ytech-0.0.1-SNAPSHOT
 
 ### Import colletion to Postman
 
-Open your Postman Application, go to `import -> upload files` or `import -> select files`. 
+Open your Postman Application, go to `import -> upload files` or `import -> select files`. <br/>
 
-![alt text](https://github.com/Vicente-jpro/blob/main/images/import.PNG)
+`Postman`
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/import.PNG) <br/>
 
-![alt text](https://github.com/Vicente-jpro/vicente-ytech/images/upload_file.PNG)
+`Import file`
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/upload_file.PNG) <br/>
 
-### Build
+`Create account`
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/create_account.PNG) <br/>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+`Authenticate account`
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/authenticate_account.PNG) <br/>
 
-### Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-### Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-### Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-
-### Aplication running
-
-`home`
-![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/import.PNG)
-
-### Aplication running
-`login`
-![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/login.png)
-`atualizar cliente`
-![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/clientes-atualizar.png)
-`clista de clientes`
-![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/clientes-lista.png)
 `Pesquisa de servicos`
 ![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/prestacao-servico-search.png)
 `Servico prestados`
