@@ -16,6 +16,7 @@ import com.example.vicenteytech.entities.Order;
 import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.OrderException;
 import com.example.vicenteytech.repositories.OrderRepository;
+import com.example.vicenteytech.util.CurrentUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +29,12 @@ public class OrderService {
 	
 	private final OrderRepository orderRepository;
 	private final ItemService itemService;
-	
+	//private final CurrentUser currentUser;
 	private final ModelMapper modelMapper;
 	
 	public Order save(OrderDTO orderDTO) {
 		log.info("Saving Order...");
-		
+	
 		Order order = modelMapper.map(orderDTO, Order.class);
 		List<Item> items = orderDTO.getItems()
 				.stream()
@@ -50,8 +51,7 @@ public class OrderService {
 			order.setCreationDate(LocalDate.now());
 		}
 		
-        UserModel user = new UserModel();
-        user.setId(1);
+        UserModel user = modelMapper.map(orderDTO.getUser(), UserModel.class);
         order.setUser(user);
         
 		return orderRepository.save(order);

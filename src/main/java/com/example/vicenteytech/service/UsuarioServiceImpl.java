@@ -1,6 +1,9 @@
 package com.example.vicenteytech.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,10 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.vicenteytech.dto.UserDTO;
 import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
 import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.repositories.UsuarioRepository;
+import com.example.vicenteytech.util.CurrentUser;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +30,9 @@ public class UsuarioServiceImpl implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository repository;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Transactional
     public UserModel salvar(UserModel usuario){
@@ -57,12 +65,35 @@ public class UsuarioServiceImpl implements UserDetailsService {
         String[] roles = usuario.isAdmin() ?
                 new String[]{"ADMIN", "USER"} : new String[]{"USER"};
 
+		UserDetails user = User
+				.builder()
+				.username(usuario.getEmail())
+				.password(usuario.getPassword())
+				.roles(roles)
+				.build();
+
+		return new CurrentUser(usuario);
+		/*
         return User
                 .builder()
                 .username(usuario.getEmail())
                 .password(usuario.getPassword())
                 .roles(roles)
                 .build();
+                */
+    }
+    
+    public Object getLoggedInUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal(); 
+          
+            
+            return userDetails.getAuthorities();
+        } else {
+            return null;
+        }
     }
 
 }

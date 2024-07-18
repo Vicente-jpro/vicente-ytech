@@ -4,6 +4,8 @@ package com.example.vicenteytech.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,8 +17,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vicenteytech.dto.OrderDTO;
+import com.example.vicenteytech.dto.UserDTO;
 import com.example.vicenteytech.entities.Order;
 import com.example.vicenteytech.service.OrderService;
+import com.example.vicenteytech.service.UsuarioServiceImpl;
+import com.example.vicenteytech.util.CurrentUser;
+import com.example.vicenteytech.util.LoggedInUser;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -32,6 +38,7 @@ public class OrderController {
 	
 	private final OrderService orderService;
 	private final ModelMapper modelMapper;
+	private final UsuarioServiceImpl usuarioServiceImpl;
 	
 	@PostMapping
 	@ApiOperation("Save an Order")
@@ -40,13 +47,26 @@ public class OrderController {
 		@ApiResponse(code = 201, message = "Order saved successfully."),
 		@ApiResponse(code = 400, message = "Could not save the Order." )
 	})
-	public OrderDTO save(@RequestBody OrderDTO orderDTO) {
+	public OrderDTO save(@RequestBody OrderDTO orderDTO, @LoggedInUser CurrentUser currentUser) {
 	
+		UserDTO userDTO = UserDTO
+				.builder()
+					.id(currentUser.getUser().getId())
+				.build();
+		
+		orderDTO.setUser(userDTO);
 		Order stock = orderService.save(orderDTO);
 		OrderDTO stockDTO = modelMapper.map(stock, OrderDTO.class);
 		
 		return stockDTO;
 	}
+	
+	   @GetMapping("/current")
+	    public Object getCurrentUser(Authentication authentication) {
+		
+	        return authentication.getPrincipal();
+	    }
+	   
 	
 	@PatchMapping("/{id_order}")
 	@ApiOperation("Update Order with id.")

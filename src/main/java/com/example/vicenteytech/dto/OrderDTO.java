@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.vicenteytech.entities.UserModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -28,6 +29,9 @@ public class OrderDTO {
 	
 	@JsonProperty("items")
 	private List<ItemDTO> items = new ArrayList<ItemDTO>();
+	
+	@JsonProperty("user")
+	private UserDTO user;
 	
 	
 }
