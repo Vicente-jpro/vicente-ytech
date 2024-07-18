@@ -41,9 +41,12 @@ public class Order {
 	@JoinTable(name = "order_items",
 	joinColumns = @JoinColumn(name = "order_id"),
     inverseJoinColumns = @JoinColumn(name = "item_id"))
-	private Set<Item> items = new HashSet<>();
+	private Set<Item> items = new HashSet<Item>();
 	
-	
+	/**
+	@Column(name = "completed")
+	private boolean completed = false;
+	*/
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private UserModel user;

@@ -1,18 +1,22 @@
 package com.example.vicenteytech.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.example.vicenteytech.dto.StockMovementDTO;
+import com.example.vicenteytech.dto.OrderDTO;
 import com.example.vicenteytech.entities.Item;
-import com.example.vicenteytech.entities.StockMovement;
-import com.example.vicenteytech.exceptions.StockMovementException;
-import com.example.vicenteytech.repositories.StockMovementRepository;
+import com.example.vicenteytech.entities.Order;
+import com.example.vicenteytech.entities.UserModel;
+import com.example.vicenteytech.exceptions.OrderException;
+import com.example.vicenteytech.repositories.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,55 +27,62 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OrderService {
 	
-
-	private final StockMovementRepository stockMovementRepository;
+	private final OrderRepository orderRepository;
 	private final ItemService itemService;
 	
 	private final ModelMapper modelMapper;
 	
-	public StockMovement save(StockMovementDTO stockMovementDTO) {
-		log.info("Saving StockMovement...");
+	public Order save(OrderDTO orderDTO) {
+		log.info("Saving Order...");
 		
-		StockMovement stockMovement = modelMapper.map(stockMovementDTO, StockMovement.class);
-		Item item = itemService.getItemById(stockMovementDTO.getItem().getId());
-		stockMovement.setItem(item);
+		Order order = modelMapper.map(orderDTO, Order.class);
+		List<Item> items = orderDTO.getItems()
+				.stream()
+				.map( it -> {
+					
+					Item item = itemService.getItemById(it.getId());
+					
+					return item;
+				}).collect(Collectors.toList());
 		
-		String date = String.valueOf(stockMovementDTO.getCreationDate());
-		
-        LocalDate creationalDate = LocalDate.parse(date,
-        		DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        stockMovement.setCreationDate(creationalDate);
+		Set<Item> itemsToSet = new LinkedHashSet<Item>(items);
+		order.setItems(itemsToSet);
+        order.setCreationDate(LocalDate.now());
         
-		return stockMovementRepository.save(stockMovement);
+        UserModel user = new UserModel();
+        user.setId(1);
+        order.setUser(user);
+        
+		return orderRepository.save(order);
 		
 	}
 	
-	public StockMovement update(StockMovementDTO stockMovementDTO, Long idStock) {
-		log.info("Updating StockMovement...");		
-		StockMovement stockMovementSaved = getStockMovementById(idStock);
-		stockMovementDTO.setId(stockMovementSaved.getId());
+	public Order update(OrderDTO orderDTO, Long idOrder) {
+		log.info("Updating Order...");		
+		Order orderSaved = getOrderById(idOrder);
+		orderDTO.setId(orderSaved.getId());
 		
-		return this.save(stockMovementDTO);
+		return this.save(orderDTO);
 	}
 	
-	public StockMovement getStockMovementById(Long idStock) {
-		log.info("StockMovement was not found ID: {}", idStock);
+	public Order getOrderById(Long idOrder) {
+		log.info("Order was not found ID: {}", idOrder);
 		
-		StockMovement stockMovement = stockMovementRepository.findById(idStock).get();
-		if(stockMovement == null) {
-			log.error("StockMovement was not found ID: {}", idStock);
-			throw new StockMovementException("StockMovement was not found.");
+		Order order = orderRepository.findById(idOrder).get();
+		if(order == null) {
+			log.error("Order was not found ID: {}", idOrder);
+			throw new OrderException("Order was not found.");
 		}
 		
-		return stockMovement;
+		return order;
 	}
 	
 	
-	public void delete(Long idStock) {
-		log.info("Deleting item with ID: {}", idStock);
+	public void delete(Long idOrder) {
+		log.info("Deleting item with ID: {}", idOrder);
 		
-		StockMovement stock = getStockMovementById(idStock);
-		stockMovementRepository.delete(stock);
+		Order stock = getOrderById(idOrder);
+		orderRepository.delete(stock);
 	}
 	
 	
