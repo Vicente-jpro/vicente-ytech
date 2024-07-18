@@ -1,7 +1,8 @@
 package com.example.vicenteytech.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +23,11 @@ public class OrderDTO {
 	@JsonProperty("quantity")
 	private Integer quantity;
 	
+	@JsonProperty("creation_date")
+	private LocalDate creationDate;
+	
 	@JsonProperty("items")
-	private Set<ItemDTO> items = new HashSet<ItemDTO>();
+	private List<ItemDTO> items = new ArrayList<ItemDTO>();
+	
 	
 }

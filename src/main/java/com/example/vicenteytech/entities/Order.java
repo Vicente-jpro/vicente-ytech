@@ -1,8 +1,8 @@
 package com.example.vicenteytech.entities;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.example.vicenteytech.dto.ItemDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,7 +43,7 @@ public class Order {
 	@JoinTable(name = "order_items",
 	joinColumns = @JoinColumn(name = "order_id"),
     inverseJoinColumns = @JoinColumn(name = "item_id"))
-	private Set<Item> items = new HashSet<Item>();
+	private List<Item> items = new ArrayList<Item>();
 	
 	/**
 	@Column(name = "completed")

@@ -1,9 +1,7 @@
 package com.example.vicenteytech.service;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -11,6 +9,7 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.example.vicenteytech.dto.ItemDTO;
 import com.example.vicenteytech.dto.OrderDTO;
 import com.example.vicenteytech.entities.Item;
 import com.example.vicenteytech.entities.Order;
@@ -45,10 +44,12 @@ public class OrderService {
 					return item;
 				}).collect(Collectors.toList());
 		
-		Set<Item> itemsToSet = new LinkedHashSet<Item>(items);
-		order.setItems(itemsToSet);
-        order.setCreationDate(LocalDate.now());
-        
+	
+		order.setItems(items);
+		if(orderDTO.getId() == null) {
+			order.setCreationDate(LocalDate.now());
+		}
+		
         UserModel user = new UserModel();
         user.setId(1);
         order.setUser(user);
@@ -60,8 +61,21 @@ public class OrderService {
 	public Order update(OrderDTO orderDTO, Long idOrder) {
 		log.info("Updating Order...");		
 		Order orderSaved = getOrderById(idOrder);
+	
 		orderDTO.setId(orderSaved.getId());
 		
+		List<ItemDTO> itemsDTO = orderDTO.getItems()
+				.stream()
+				.map( it -> {
+					
+					ItemDTO item = new ItemDTO();
+					item.setId(it.getId());
+	
+					return item;
+		}).collect(Collectors.toList());
+		
+		orderDTO.setItems(itemsDTO);
+		orderDTO.setCreationDate(orderSaved.getCreationDate());
 		return this.save(orderDTO);
 	}
 	
