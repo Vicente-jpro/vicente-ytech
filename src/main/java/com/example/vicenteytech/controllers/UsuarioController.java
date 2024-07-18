@@ -2,6 +2,7 @@ package com.example.vicenteytech.controllers;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.vicenteytech.dto.CredenciaisDTO;
 import com.example.vicenteytech.dto.TokenDTO;
+import com.example.vicenteytech.dto.UserDTO;
 import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
 import com.example.vicenteytech.security.jwt.JwtService;
@@ -30,13 +32,18 @@ public class UsuarioController {
     private final UsuarioServiceImpl usuarioService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserModel salvar( @RequestBody @Valid UserModel usuario ){
-        String senhaCriptografada = passwordEncoder.encode(usuario.getPassword());
-        usuario.setPassword(senhaCriptografada);
-        return usuarioService.salvar(usuario);
+    public UserDTO salvar( @RequestBody @Valid UserDTO userDTO ){
+        String senhaCriptografada = passwordEncoder.encode(userDTO.getPassword());
+        userDTO.setPassword(senhaCriptografada);
+        UserModel user = modelMapper.map(userDTO, UserModel.class);
+        UserModel userSaved = usuarioService.salvar(user);
+        userDTO.setId(userSaved.getId());
+        
+        return userDTO;
     }
 
     @PostMapping("/auth")

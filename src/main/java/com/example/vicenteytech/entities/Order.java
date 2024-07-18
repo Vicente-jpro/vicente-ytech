@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "stock_movement")
-public class StockMovement {
+public class Order {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column( name = "id")
@@ -35,5 +35,9 @@ public class StockMovement {
 	@ManyToOne
 	@JoinColumn(name = "item_id")
 	private Item item;
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserModel user;
 
 }
