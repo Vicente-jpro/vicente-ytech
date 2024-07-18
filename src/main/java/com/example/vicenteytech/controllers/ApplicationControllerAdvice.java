@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.vicenteytech.exceptions.ItemException;
+import com.example.vicenteytech.exceptions.OrderException;
+import com.example.vicenteytech.exceptions.StockMovementException;
 import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.util.ApiErrors;
 
@@ -28,7 +30,18 @@ public class ApplicationControllerAdvice {
     public ApiErrors handleUsuarioException( UsuarioException ex ){
         return new ApiErrors(ex.getMessage());
     }
-        
+    
+    @ExceptionHandler(StockMovementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrors handleStockMovementException( StockMovementException ex ){
+        return new ApiErrors(ex.getMessage());
+    }
+    
+    @ExceptionHandler(OrderException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrors handleStockMovementException( OrderException ex ){
+        return new ApiErrors(ex.getMessage());
+    }  
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
