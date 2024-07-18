@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.vicenteytech.dto.CredenciaisDTO;
 import com.example.vicenteytech.dto.TokenDTO;
 import com.example.vicenteytech.dto.UserDTO;
+import com.example.vicenteytech.dto.UserResponseDTO;
 import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
 import com.example.vicenteytech.security.jwt.JwtService;
@@ -36,14 +37,15 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO salvar( @RequestBody @Valid UserDTO userDTO ){
+    public UserResponseDTO salvar( @RequestBody @Valid UserDTO userDTO ){
         String senhaCriptografada = passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword(senhaCriptografada);
         UserModel user = modelMapper.map(userDTO, UserModel.class);
         UserModel userSaved = usuarioService.salvar(user);
-        userDTO.setId(userSaved.getId());
         
-        return userDTO;
+        userDTO.setId(userSaved.getId());
+        UserResponseDTO useResponseDto = modelMapper.map(userDTO, UserResponseDTO.class);
+        return useResponseDto;
     }
 
     @PostMapping("/auth")
