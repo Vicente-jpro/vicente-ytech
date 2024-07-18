@@ -16,7 +16,7 @@ Execute the jar file by running `java -jar ./target/vicente-ytech-0.0.1-SNAPSHOT
 
 Open your Postman Application, go to `import -> upload files` or `import -> select files`. 
 
-![alt text](https://github.com/Vicente-jpro/blob/readme/images/import.PNG)
+![alt text](https://github.com/Vicente-jpro/blob/main/images/import.PNG)
 
 ![alt text](https://github.com/Vicente-jpro/vicente-ytech/images/upload_file.PNG)
 
