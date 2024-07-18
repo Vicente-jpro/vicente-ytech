@@ -7,7 +7,7 @@ This project was with `Spring Boot version 2.7.16, Spring Security, Token JWT` a
 
 ### Development server
  
-Navegate to the inside `/vicente-ytech` folder. Open your terminal and run this command do create
+Navegate inside `/vicente-ytech` folder. Open your terminal and run this command do create
 a `jar` file. <br/> 
 
 Execute the jar file by running `java -jar ./target/vicente-ytech-0.0.1-SNAPSHOT.jar` then open your browser `http://localhost:8080/api/`. <br/>
@@ -27,6 +27,10 @@ Open your Postman Application, go to `import -> upload files` or `import -> sele
 
 `Authenticate account`
 ![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/authenticate_account.PNG) <br/>
+
+<br/>
+After getting `token` , copy it. In Postman go to `Authorization` , select `Bearer Token` and past the  `token` to the feild.
+
 
 `Pesquisa de servicos`
 ![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/prestacao-servico-search.png)
