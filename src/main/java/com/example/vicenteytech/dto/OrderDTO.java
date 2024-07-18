@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.vicenteytech.entities.UserModel;
+import com.example.vicenteytech.enums.StatusOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -33,5 +33,7 @@ public class OrderDTO {
 	@JsonProperty("user")
 	private UserResponseDTO user;
 	
+	@JsonProperty("status_order")
+	private StatusOrder status;
 	
 }

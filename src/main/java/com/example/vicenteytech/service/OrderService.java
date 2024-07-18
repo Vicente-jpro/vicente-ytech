@@ -14,6 +14,7 @@ import com.example.vicenteytech.dto.OrderDTO;
 import com.example.vicenteytech.entities.Item;
 import com.example.vicenteytech.entities.Order;
 import com.example.vicenteytech.entities.UserModel;
+import com.example.vicenteytech.enums.StatusOrder;
 import com.example.vicenteytech.exceptions.OrderException;
 import com.example.vicenteytech.repositories.OrderRepository;
 import com.example.vicenteytech.util.CurrentUser;
@@ -27,9 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class OrderService {
 	
-	private final OrderRepository orderRepository;
 	private final ItemService itemService;
 	private final ModelMapper modelMapper;
+	private final OrderRepository orderRepository;
+	private final StockMovementService sotkMovementService;
 	
 	public Order save(OrderDTO orderDTO) {
 		log.info("Saving Order...");
@@ -41,10 +43,14 @@ public class OrderService {
 					
 					Item item = itemService.getItemById(it.getId());
 					
+					if( isOrderCompleted(orderDTO) ) {
+						sotkMovementService.takeItem(item, order);
+					}
+					
+					
 					return item;
 				}).collect(Collectors.toList());
 		
-	
 		order.setItems(items);
 		if(orderDTO.getId() == null) {
 			order.setCreationDate(LocalDate.now());
@@ -85,6 +91,7 @@ public class OrderService {
 		return this.save(orderDTO);
 	}
 	
+	
 	public Order getOrderById(Long idOrder) {
 		log.info("Order was not found ID: {}", idOrder);
 		
@@ -105,5 +112,8 @@ public class OrderService {
 		orderRepository.delete(stock);
 	}
 	
+	private boolean isOrderCompleted(OrderDTO orderDTO) {
+		return orderDTO.getStatus().equals(StatusOrder.COMPLETED);
+	}
 	
 }

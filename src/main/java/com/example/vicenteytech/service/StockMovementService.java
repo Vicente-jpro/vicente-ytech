@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.vicenteytech.dto.StockMovementDTO;
 import com.example.vicenteytech.entities.Item;
+import com.example.vicenteytech.entities.Order;
 import com.example.vicenteytech.entities.StockMovement;
 import com.example.vicenteytech.exceptions.StockMovementException;
 import com.example.vicenteytech.repositories.StockMovementRepository;
@@ -66,6 +67,25 @@ public class StockMovementService {
 		return stockMovement;
 	}
 	
+	public void takeItem(Item item, Order order) {
+		log.info("Taking item from StockMovement ID: {}", item.getId());
+		
+		StockMovement itemStock = stockMovementRepository.findByItem(item);
+		
+		if (isValidItemAndQuantity(itemStock, order)) {
+			
+			log.error("We only have {} of the item(s) {}",itemStock.getQuantity(), itemStock.getItem().getName() );
+			throw new StockMovementException(
+					"We only have "+itemStock.getQuantity()+" of the item(s) "+itemStock.getItem().getName());
+		}else {
+			Integer quantity = itemStock.getQuantity() - order.getQuantity();
+			itemStock.setQuantity(quantity);
+			StockMovementDTO stockMovementDTO = modelMapper.map(itemStock, StockMovementDTO.class);
+			this.save(stockMovementDTO);
+		}
+		
+	}
+	
 	
 	public void delete(Long idStock) {
 		log.info("Deleting item with ID: {}", idStock);
@@ -74,5 +94,8 @@ public class StockMovementService {
 		stockMovementRepository.delete(stock);
 	}
 	
+	private boolean isValidItemAndQuantity(StockMovement itemStock, Order order) {
+		return (itemStock.getQuantity() < order.getQuantity()) && (itemStock != null);
+	}
 	
 }
