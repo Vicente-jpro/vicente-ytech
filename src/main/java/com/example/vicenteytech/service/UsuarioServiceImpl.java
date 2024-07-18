@@ -73,14 +73,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
 				.build();
 
 		return new CurrentUser(usuario);
-		/*
-        return User
-                .builder()
-                .username(usuario.getEmail())
-                .password(usuario.getPassword())
-                .roles(roles)
-                .build();
-                */
+
     }
     
     public Object getLoggedInUsername() {

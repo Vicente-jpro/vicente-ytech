@@ -29,7 +29,6 @@ public class OrderService {
 	
 	private final OrderRepository orderRepository;
 	private final ItemService itemService;
-	//private final CurrentUser currentUser;
 	private final ModelMapper modelMapper;
 	
 	public Order save(OrderDTO orderDTO) {
@@ -60,22 +59,29 @@ public class OrderService {
 	
 	public Order update(OrderDTO orderDTO, Long idOrder) {
 		log.info("Updating Order...");		
+		
 		Order orderSaved = getOrderById(idOrder);
-	
-		orderDTO.setId(orderSaved.getId());
+		Integer userId = orderSaved.getUser().getId();
 		
-		List<ItemDTO> itemsDTO = orderDTO.getItems()
-				.stream()
-				.map( it -> {
-					
-					ItemDTO item = new ItemDTO();
-					item.setId(it.getId());
-	
-					return item;
-		}).collect(Collectors.toList());
-		
-		orderDTO.setItems(itemsDTO);
-		orderDTO.setCreationDate(orderSaved.getCreationDate());
+		if (orderDTO.getUser().getId() != userId) {
+			log.info("This order belongs to another user.");
+			throw new OrderException("This order belongs to another user.");
+		}else {
+				orderDTO.setId(orderSaved.getId());
+				
+				List<ItemDTO> itemsDTO = orderDTO.getItems()
+						.stream()
+						.map( it -> {
+							
+							ItemDTO item = new ItemDTO();
+							item.setId(it.getId());
+			
+							return item;
+				}).collect(Collectors.toList());
+				
+				orderDTO.setItems(itemsDTO);
+				orderDTO.setCreationDate(orderSaved.getCreationDate());
+			}
 		return this.save(orderDTO);
 	}
 	

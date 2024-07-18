@@ -31,7 +31,7 @@ public class OrderDTO {
 	private List<ItemDTO> items = new ArrayList<ItemDTO>();
 	
 	@JsonProperty("user")
-	private UserDTO user;
+	private UserResponseDTO user;
 	
 	
 }
