@@ -39,7 +39,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### Aplication running
 
 `home`
-![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/home.png)
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/import.PNG)
 
 ### Aplication running
 `login`
