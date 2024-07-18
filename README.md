@@ -26,13 +26,11 @@ Open your Postman Application, go to `import -> upload files` or `import -> sele
 ![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/create_account.PNG) <br/>
 
 `Authenticate account`
-![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/authenticate_account.PNG) <br/>
-
-<br/>
-After getting `token` , copy it. In Postman go to `Authorization` , select `Bearer Token` and past the  `token` to the feild.
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/authenticate_account.PNG) <br/> <br/>
 
 
-`Pesquisa de servicos`
-![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/prestacao-servico-search.png)
-`Servico prestados`
-![alt text](https://github.com/Vicente-jpro/cliente-front-end/blob/master/src/assets/img-projects/servico-prestados-form-novo.png)
+After getting `token` , copy it. In Postman go to `Authorization` , select `Bearer Token` and past the  `token` to the feild. <br/>
+
+![alt text](https://github.com/Vicente-jpro/vicente-ytech/blob/main/images/request.PNG) <br/> <br/>
+
+Now you can make any request in this API by copy and past the token to the right plase.
