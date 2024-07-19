@@ -12,6 +12,24 @@ a `jar` file. <br/>
 
 Execute the jar file by running `java -jar ./target/vicente-ytech-0.0.1-SNAPSHOT.jar` then open your browser `http://localhost:8080/api/`. <br/>
 
+### Database seed
+
+Execute this code to in your database.
+
+```sql
+INSERT INTO items (name) VALUES ('Java');
+INSERT INTO items (name) VALUES ('Ruby');
+INSERT INTO items (name) VALUES ('Go');
+INSERT INTO items (name) VALUES ('PHP');
+
+INSERT INTO stock_movement (creation_date, quantity, item_id)
+	VALUES ('2024-08-08', 9000, 1);
+INSERT INTO stock_movement (creation_date, quantity, item_id)
+	VALUES ('2024-09-08', 4000, 2);
+INSERT INTO stock_movement (creation_date, quantity, item_id)
+	VALUES ('2024-07-08', 98000, 2);
+```
+
 ### Import colletion to Postman
 
 Open your Postman Application, go to `import -> upload files` or `import -> select files`. <br/>

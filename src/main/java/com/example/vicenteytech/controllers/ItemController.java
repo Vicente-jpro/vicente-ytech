@@ -73,9 +73,9 @@ public class ItemController {
 		ItemDTO itemDTO = modelMapper.map(itemSaved, ItemDTO.class);
 		stockDTO.setItem(itemDTO);
 		StockMovement sockMovement = stockMovementService.getStockMovementByItem(itemSaved);
-		stockDTO = modelMapper.map(sockMovement, StockMovementDTO.class);
 		
-		stockMovementService.update(stockDTO, stockDTO.getId());
+		
+		stockMovementService.update(stockDTO, sockMovement.getId());
 		
 		itemDTO.setId(itemSaved.getId());
 		
