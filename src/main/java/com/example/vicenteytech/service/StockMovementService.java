@@ -1,7 +1,7 @@
 package com.example.vicenteytech.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -52,6 +52,11 @@ public class StockMovementService {
 		stockMovementDTO.setCreationDate(stockMovementSaved.getCreationDate());
 		
 		return this.save(stockMovementDTO);
+	}
+	
+	public List<StockMovement> getStockMovements(){
+		log.info("Listing all StockMovement...");	
+		return this.stockMovementRepository.findAll();
 	}
 	
 	public StockMovement getStockMovementById(Long idStock) {

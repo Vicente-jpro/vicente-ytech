@@ -17,7 +17,6 @@ import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.enums.StatusOrder;
 import com.example.vicenteytech.exceptions.OrderException;
 import com.example.vicenteytech.repositories.OrderRepository;
-import com.example.vicenteytech.util.CurrentUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +101,11 @@ public class OrderService {
 		}
 		
 		return order;
+	}
+	
+	public List<Order> getOrders() {
+		log.info("Listing all orders...");
+		return this.orderRepository.findAll();
 	}
 	
 	
