@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vicenteytech.dto.ItemDTO;
+import com.example.vicenteytech.dto.StockMovementDTO;
 import com.example.vicenteytech.entities.Item;
+import com.example.vicenteytech.entities.StockMovement;
 import com.example.vicenteytech.service.ItemService;
+import com.example.vicenteytech.service.StockMovementService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -31,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class ItemController {
 	
 	private final ItemService itemService;
+	private final StockMovementService stockMovementService;
 	private final ModelMapper modelMapper;
 	
 	@PostMapping
@@ -40,9 +44,15 @@ public class ItemController {
 		@ApiResponse(code = 201, message = "ItemDTO saved successfully."),
 		@ApiResponse(code = 400, message = "Could not save the item." )
 	})
-	public ItemDTO salvar(@RequestBody ItemDTO itemDTO) {
-		Item item = modelMapper.map(itemDTO, Item.class);
+	public ItemDTO salvar(@RequestBody StockMovementDTO stockDTO) {
+		
+		Item item = modelMapper.map(stockDTO.getItem(), Item.class);
 		Item itemSaved = itemService.salvar(item);
+		
+		ItemDTO itemDTO = modelMapper.map(itemSaved, ItemDTO.class);
+		stockDTO.setItem(itemDTO);
+		stockMovementService.save(stockDTO);
+		
 		itemDTO.setId(itemSaved.getId());
 		
 		return itemDTO;
@@ -55,11 +65,20 @@ public class ItemController {
 		@ApiResponse(code = 201, message = "ItemDTO saved successfully."),
 		@ApiResponse(code = 400, message = "Could not update the item.")
 	})
-	public ItemDTO atualizar(@RequestBody ItemDTO itemDTO, @PathVariable("id_item") Long idItem) {
+	public ItemDTO atualizar(@RequestBody StockMovementDTO stockDTO, @PathVariable("id_item") Long idItem) {
 		
-		Item item = modelMapper.map(itemDTO, Item.class);
+		Item item = modelMapper.map(stockDTO.getItem(), Item.class);
 		Item itemSaved =  itemService.update(item, idItem);
+		
+		ItemDTO itemDTO = modelMapper.map(itemSaved, ItemDTO.class);
+		stockDTO.setItem(itemDTO);
+		StockMovement sockMovement = stockMovementService.getStockMovementByItem(itemSaved);
+		
+		
+		stockMovementService.update(stockDTO, sockMovement.getId());
+		
 		itemDTO.setId(itemSaved.getId());
+		
 		
 		return itemDTO;
 		
