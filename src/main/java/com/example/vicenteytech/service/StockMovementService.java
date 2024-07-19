@@ -37,26 +37,25 @@ public class StockMovementService {
 		Item item = itemService.getItemById(stockMovementDTO.getItem().getId());
 		stockMovement.setItem(item);
 		
-		String date = String.valueOf(stockMovementDTO.getCreationDate());
-		
-        LocalDate creationalDate = LocalDate.parse(date,
-        		DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        stockMovement.setCreationDate(creationalDate);
-        
+		if(stockMovementDTO != null) {
+			stockMovement.setCreationDate(LocalDate.now());
+		}
 		return stockMovementRepository.save(stockMovement);
 		
 	}
 	
 	public StockMovement update(StockMovementDTO stockMovementDTO, Long idStock) {
 		log.info("Updating StockMovement...");		
+		
 		StockMovement stockMovementSaved = getStockMovementById(idStock);
 		stockMovementDTO.setId(stockMovementSaved.getId());
+		stockMovementDTO.setCreationDate(stockMovementSaved.getCreationDate());
 		
 		return this.save(stockMovementDTO);
 	}
 	
 	public StockMovement getStockMovementById(Long idStock) {
-		log.info("StockMovement was not found ID: {}", idStock);
+		log.info("Finding StockMovement with ID: {}", idStock);
 		
 		StockMovement stockMovement = stockMovementRepository.findById(idStock).get();
 		if(stockMovement == null) {
@@ -67,12 +66,24 @@ public class StockMovementService {
 		return stockMovement;
 	}
 	
+	public StockMovement getStockMovementByItem(Item item) {
+		log.info("Finding StockMovement with ID: {}", item.getId());
+		
+		StockMovement stockMovement = stockMovementRepository.findByItem(item);
+		if(stockMovement == null) {	
+		log.error("To continue, please add This item to StockMovement. ID: {}", item.getId() );
+		throw new StockMovementException("To continue, please add This item to StockMovement. ID:"+item.getId());
+		
+		}
+		
+		return stockMovement;
+	}
+	
 	public void takeItem(Item item, Order order) {
 		log.info("Taking item from StockMovement ID: {}", item.getId());
 		
-		StockMovement itemStock = stockMovementRepository.findByItem(item);
-		
-		if (isValidItemAndQuantity(itemStock, order)) {
+		StockMovement itemStock = this.getStockMovementByItem(item);
+		 if (isValidItemAndQuantity(itemStock, order)) {
 			
 			log.error("We only have {} of the item(s) {}",itemStock.getQuantity(), itemStock.getItem().getName() );
 			throw new StockMovementException(
@@ -95,7 +106,7 @@ public class StockMovementService {
 	}
 	
 	private boolean isValidItemAndQuantity(StockMovement itemStock, Order order) {
-		return (itemStock.getQuantity() < order.getQuantity()) && (itemStock != null);
+		return itemStock.getQuantity() < order.getQuantity();
 	}
 	
 }
