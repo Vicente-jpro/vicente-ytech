@@ -28,6 +28,8 @@ INSERT INTO stock_movement (creation_date, quantity, item_id)
 	VALUES ('2024-09-08', 4000, 2);
 INSERT INTO stock_movement (creation_date, quantity, item_id)
 	VALUES ('2024-07-08', 98000, 2);
+    INSERT INTO stock_movement (creation_date, quantity, item_id)
+	VALUES ('2024-07-08', 7000, 2);
 ```
 
 ### Import colletion to Postman
