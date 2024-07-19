@@ -2,6 +2,9 @@ package com.example.vicenteytech.controllers;
 
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -98,6 +101,24 @@ public class ItemController {
 		ItemDTO itemDTO = modelMapper.map(itemSaved, ItemDTO.class);
 		
 		return itemDTO;
+	}
+	
+	@GetMapping()
+	@ApiOperation("Get all item with id.")
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "ItemDTO saved successfully."),
+		@ApiResponse(code = 400, message = "ItemDTO do not exist.")
+	})
+	public List<ItemDTO> getItems() {
+		
+		return itemService.getItems()
+				.stream()
+				.map( item ->{
+					ItemDTO itemDTO = modelMapper.map(item, ItemDTO.class);
+					
+					return itemDTO;
+		}).collect(Collectors.toList());
 	}
 	
 	@DeleteMapping("/{id_item}")

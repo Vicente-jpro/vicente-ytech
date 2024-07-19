@@ -1,5 +1,8 @@
 package com.example.vicenteytech.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -35,7 +38,7 @@ public class OrderController {
 	private final OrderService orderService;
 	private final ModelMapper modelMapper;
 	private final UsuarioServiceImpl usuarioServiceImpl;
-
+	
 	@PostMapping
 	@ApiOperation("Save an Order")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -113,6 +116,20 @@ public class OrderController {
 		OrderDTO stockDTO = modelMapper.map(stock, OrderDTO.class);
 
 		return stockDTO;
+	}
+	
+	@GetMapping()
+	@ApiOperation("Get all Order by current_user.")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiResponse(code = 200, message = "Order was saved successfully.")
+	public List<OrderDTO> getOrders() {
+
+		return orderService.getOrders()
+				.stream()
+				.map( order -> {
+					OrderDTO ordeDTO = modelMapper.map(order, OrderDTO.class);
+					return ordeDTO;
+				}).collect(Collectors.toList());
 	}
 
 	@DeleteMapping("/{id_order}")

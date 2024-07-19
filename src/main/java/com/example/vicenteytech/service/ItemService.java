@@ -1,5 +1,6 @@
 package com.example.vicenteytech.service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
@@ -41,6 +42,11 @@ public class ItemService {
 		item.setId(itemSalvo.getId());
 		
 		return this.salvar(item);
+	}
+	
+	public List<Item> getItems(){
+		log.info("Listing all Items...");	
+		return this.itemRepositoy.findAll();
 	}
 	
 	public Item getItemById(Long idItem) {
