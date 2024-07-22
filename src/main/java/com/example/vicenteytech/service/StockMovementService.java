@@ -37,7 +37,7 @@ public class StockMovementService {
 		Item item = itemService.getItemById(stockMovementDTO.getItem().getId());
 		stockMovement.setItem(item);
 		
-		if(stockMovementDTO != null) {
+		if(stockMovementDTO.getId() == null) {
 			stockMovement.setCreationDate(LocalDate.now());
 		}
 		return stockMovementRepository.save(stockMovement);
