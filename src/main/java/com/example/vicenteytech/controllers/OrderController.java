@@ -107,7 +107,7 @@ public class OrderController {
 
 	@GetMapping("/{id_order}")
 	@ApiOperation("Get an Order with id.")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Order was saved successfully."),
 			@ApiResponse(code = 400, message = "Order do not exist.") })
 	public OrderDTO getOrderById(@PathVariable("id_order") Long idOrder) {
@@ -134,7 +134,7 @@ public class OrderController {
 
 	@DeleteMapping("/{id_order}")
 	@ApiOperation("Update Order with id.")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Order was Deleted successfully."),
 			@ApiResponse(code = 400, message = "Error on deleting Order.") })
 	public void deleteById(@PathVariable("id_order") Long idOrder) {

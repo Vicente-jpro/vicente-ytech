@@ -61,7 +61,7 @@ public class StockMovementController {
 
 	@GetMapping("/{id_stock}")
 	@ApiOperation("Get an Stock Movement with id.")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement saved successfully."),
 			@ApiResponse(code = 400, message = "Stock Movement do not exist.") })
 	public StockMovementDTO getStockMovementDTOById(@PathVariable("id_stock") Long idStockMovementDTO) {
@@ -74,7 +74,7 @@ public class StockMovementController {
 
 	@GetMapping
 	@ApiOperation("Get all Stock Movement.")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.OK)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement got successfully."), })
 	public List<StockMovementDTO> getStockMovements() {
 
@@ -89,7 +89,7 @@ public class StockMovementController {
 
 	@DeleteMapping("/{id_stock}")
 	@ApiOperation("Update Stock Movement with id.")
-	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement Deleted successfully."),
 			@ApiResponse(code = 400, message = "Error on deleting Stock Movement.") })
 	public void deleteById(@PathVariable("id_stock") Long idStockMovementDTO) {
