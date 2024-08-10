@@ -22,6 +22,7 @@ import com.example.vicenteytech.dto.UserResponseDTO;
 import com.example.vicenteytech.entities.Order;
 import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.enums.StatusOrder;
+import com.example.vicenteytech.repositories.OrderRepository;
 import com.example.vicenteytech.service.OrderService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
 import com.example.vicenteytech.util.CurrentUser;
@@ -151,9 +152,19 @@ public class OrderController {
 		@ApiResponse(code = 200, message = "Find orders by user"),
 		@ApiResponse(code = 400, message = "this user never created an order not.")
 	})
-	public UserModel getOrdersByUser(Authentication authentication) {
+	public List<OrderDTO> getOrdersByUser(Authentication authentication) {
 		CurrentUser user = modelMapper.map(authentication.getPrincipal(), CurrentUser.class);
-		return user.getUser();
+		
+		List<Order> orders = orderService.getOrdersByUser(user.getUser());
+		
+		return orders
+				.stream()
+				.map( order -> {
+					OrderDTO ordeDTO = modelMapper.map(order, OrderDTO.class);
+					return ordeDTO;
+				}).collect(Collectors.toList());
+		
+		
 	}
 
 }

@@ -47,14 +47,27 @@ public class UsuarioServiceImpl implements UserDetailsService {
     }
 
     public UserDetails autenticar( UserModel usuario ){
+    	log.info("Authenticating the user..."); 
         UserDetails user = loadUserByUsername(usuario.getEmail());
         boolean senhasIguais = encoder.matches( usuario.getPassword(), user.getPassword() );
 
         if(senhasIguais){
             return user;
         }
-
+        log.error("User Authenticatication: Invalid credentials.");
         throw new SenhaInvalidaException();
+    }
+    
+    public UserDetails autenticarEmail( UserModel usuario ){
+    	log.info("Authenticating the user by email to receive reset password instruction..."); 
+        UserDetails user = loadUserByUsername(usuario.getEmail());
+
+        if(user != null){
+            return user;
+        }
+
+    	log.error("User do not exist to receive reset password instruction."); 
+        throw new UsernameNotFoundException("Email invalido.");
     }
 
     @Override
