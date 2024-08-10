@@ -39,6 +39,49 @@
 					"response": []
 				},
 				{
+					"name": "api/users/current_user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWlzYUBnbWFpbC5jb20iLCJleHAiOjE3MjMyOTg0Mjd9.c4j_H0e_hy7Oep-z7sOw3arKA13dukkRlRWDvR2D5j5YabTVBr6LjkykTs19xrW3ZHIt2g0bNLTJjLdPwG5jMQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"name\": \"Luisa Aniba\",\r\n    \"email\": \"luisa@gmail.com\",\r\n    \"password\": \"luisa\",\r\n    \"admin\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/current_user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"current_user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "api/users/auth",
 					"request": {
 						"method": "POST",
@@ -63,6 +106,74 @@
 								"api",
 								"user",
 								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/users/password/new",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"luisa@gmail.com\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/password/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"password",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/users/password/reset",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_password\": \"12345678\",\r\n    \"confirme_password\": \"12345678\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/password/reset?token=essene o token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"password",
+								"reset"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "essene o token"
+								}
 							]
 						}
 					},
@@ -531,7 +642,7 @@
 					"response": []
 				},
 				{
-					"name": "api/orders/current",
+					"name": "api/orders/user",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
