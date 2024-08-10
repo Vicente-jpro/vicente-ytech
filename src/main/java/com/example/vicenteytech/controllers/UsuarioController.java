@@ -26,12 +26,15 @@ import com.example.vicenteytech.dto.UserPasswordRestDTO;
 import com.example.vicenteytech.dto.UserResponseDTO;
 import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
+import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.security.jwt.JwtService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
 import com.example.vicenteytech.util.CurrentUser;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -81,9 +84,12 @@ public class UsuarioController {
         	UserModel usuario = new UserModel();
                     usuario.setEmail(userEmail.getEmail());
                 
-            UserDetails usuarioAutenticado = usuarioService.autenticarEmail(usuario);
-            String token = jwtService.gerarToken(usuario);
+            UserModel usuarioAutenticado = usuarioService.autenticarEmail(usuario);
+            String token = jwtService.gerarToken(usuarioAutenticado);
             TokenDTO tokenReceived = new TokenDTO(usuario.getEmail(), token);
+            
+            usuarioAutenticado.setTokenResetPassword(token);
+            this.usuarioService.salvar(usuarioAutenticado);
             
             //Send email to the user with this address.
             System.out.println(urlPasswordReset+tokenReceived.getToken());
@@ -95,14 +101,30 @@ public class UsuarioController {
     }
     
     @PostMapping("/password/reset")
-    public String passowrdReset(@RequestBody UserPasswordRestDTO userPasswordRestDTO, @RequestParam("token") String token){
+    public void passowrdReset(@RequestBody UserPasswordRestDTO userPasswordRestDTO, @RequestParam("token") String token){
     
-    	return "localhost:8080/api/user/password/reset?token";
+    	UserModel user = this.usuarioService.findByTokenResetPassword(token);
+    	boolean tokenEquals = user.isTokenEquals(user.getTokenResetPassword(), token);
+    	
+    	if(tokenEquals) {
+    		boolean passwordEqual = 
+    				user.isPasswordEquals(userPasswordRestDTO.getNewPassword(), userPasswordRestDTO.getConfirmePassword());
+    		
+    		if(passwordEqual) {
+    		   String senhaCriptografada = passwordEncoder.encode(userPasswordRestDTO.getNewPassword());   		  
+    		   user.setPassword(senhaCriptografada);
+    		   this.usuarioService.salvar(user);
+    		}else {
+    			log.error("Password is diferent");
+    			throw new UsuarioException("Password is diferent.");
+    		}
+    	}
+
     }
     
     @GetMapping("/current_user")
 	public CurrentUser getAuthenticatedUser(Authentication authentication) {
-		CurrentUser user = modelMapper.map(authentication.getPrincipal(), CurrentUser.class);
+		CurrentUser user = modelMapper.map(authentication.getPrincipal(), CurrentUser. class);
 		if (user != null)
 			return user;
 		throw new UsernameNotFoundException("You need to loggin before authenticate.");

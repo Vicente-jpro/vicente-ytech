@@ -29,7 +29,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
     private PasswordEncoder encoder;
 
     @Autowired
-    private UsuarioRepository repository;
+    private UsuarioRepository usuarioRepository;
     
     @Autowired
     private ModelMapper modelMapper;
@@ -37,8 +37,10 @@ public class UsuarioServiceImpl implements UserDetailsService {
     @Transactional
     public UserModel salvar(UserModel usuario){
     	log.info("Salvando o usuario...");
+    	
+    	
     	try {
-    		return repository.save(usuario);
+    		return usuarioRepository.save(usuario);
 		} catch (Exception e) {
 			log.error("Email ja esta registado...");
 			throw new UsuarioException("Email ja esta registado.");
@@ -58,21 +60,35 @@ public class UsuarioServiceImpl implements UserDetailsService {
         throw new SenhaInvalidaException();
     }
     
-    public UserDetails autenticarEmail( UserModel usuario ){
+    public UserModel autenticarEmail( UserModel usuario ){
     	log.info("Authenticating the user by email to receive reset password instruction..."); 
-        UserDetails user = loadUserByUsername(usuario.getEmail());
+    	
+    	UserModel user = usuarioRepository.findByEmail(usuario.getEmail()).get();
+      
+        if(user != null){
+            return user;
+        }
+
+    	log.error("User do not exist."); 
+        throw new UsernameNotFoundException("User do not exist.");
+    }
+
+    public UserModel findByTokenResetPassword(String token){
+    	log.info("Finding user by token..."); 
+    	UserModel user = usuarioRepository.findByTokenResetPassword(token);
 
         if(user != null){
             return user;
         }
 
-    	log.error("User do not exist to receive reset password instruction."); 
-        throw new UsernameNotFoundException("Email invalido.");
+    	log.error("Token has expired."); 
+        throw new UsernameNotFoundException("Token has expired.");
     }
 
+    
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    	UserModel usuario = repository.findByEmail(email)
+    	UserModel usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
         String[] roles = usuario.isAdmin() ?

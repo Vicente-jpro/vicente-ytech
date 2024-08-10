@@ -32,11 +32,11 @@ public class UserModel {
     @Column(name = "id")
     private Integer id;
     
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     @NotEmpty(message = "Username can not be empty.")
     private String name;
     
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, updatable = true)
     @NotEmpty(message = "email can not be empty.")
     private String email;
     
@@ -47,9 +47,19 @@ public class UserModel {
     @Column(name = "admin")
     private boolean admin;
     
+    @Column(name = "token_reset_password")
+    private String tokenResetPassword;
+    
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
     
-
+    
+    public boolean isTokenEquals(String token1, String token2) {
+    	return token1.equalsIgnoreCase(token2);
+    }
+    
+    public boolean isPasswordEquals(String password1, String password2) {
+    	return password1.equalsIgnoreCase(password2);
+    }
 }
