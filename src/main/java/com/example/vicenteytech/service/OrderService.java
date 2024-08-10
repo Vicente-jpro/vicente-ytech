@@ -108,6 +108,11 @@ public class OrderService {
 		return this.orderRepository.findAll();
 	}
 	
+	public List<Order> getOrdersByUser(UserModel user) {
+		log.info("Listing all orders by user...");
+		return this.orderRepository.findAllByUser(user);
+	}
+	
 	
 	public void delete(Long idOrder) {
 		log.info("Deleting item with ID: {}", idOrder);

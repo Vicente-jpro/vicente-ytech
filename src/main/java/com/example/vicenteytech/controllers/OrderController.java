@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.vicenteytech.dto.OrderDTO;
 import com.example.vicenteytech.dto.UserResponseDTO;
 import com.example.vicenteytech.entities.Order;
+import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.enums.StatusOrder;
 import com.example.vicenteytech.service.OrderService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
@@ -140,6 +142,18 @@ public class OrderController {
 	public void deleteById(@PathVariable("id_order") Long idOrder) {
 
 		orderService.delete(idOrder);
+	}
+	
+	
+	@GetMapping("/user")
+	@ApiOperation("Find orders by users.")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "Find orders by user"),
+		@ApiResponse(code = 400, message = "this user never created an order not.")
+	})
+	public UserModel getOrdersByUser(Authentication authentication) {
+		CurrentUser user = modelMapper.map(authentication.getPrincipal(), CurrentUser.class);
+		return user.getUser();
 	}
 
 }
