@@ -1,5 +1,6 @@
 package com.example.vicenteytech.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "stock_movement")
-public class StockMovement {
+public class StockMovement implements Serializable {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column( name = "id")

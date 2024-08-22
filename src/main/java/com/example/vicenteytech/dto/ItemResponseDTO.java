@@ -2,6 +2,9 @@ package com.example.vicenteytech.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.hateoas.RepresentationModel;
+
+import com.example.vicenteytech.entities.Item;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemResponseDTO {
+public class ItemResponseDTO extends RepresentationModel<ItemResponseDTO>{
 
 	@JsonProperty("id")
 	private Long id;

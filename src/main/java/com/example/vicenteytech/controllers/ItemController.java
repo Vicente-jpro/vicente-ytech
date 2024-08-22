@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import com.example.vicenteytech.entities.Item;
 import com.example.vicenteytech.entities.StockMovement;
 import com.example.vicenteytech.service.ItemService;
 import com.example.vicenteytech.service.StockMovementService;
+import com.example.vicenteytech.util.SelfLinkHateoas;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -89,6 +91,9 @@ public class ItemController {
 		ItemResponseDTO itemStockDTO = modelMapper.map(itemStok, ItemResponseDTO.class);
 		itemDTO.setId(itemSaved.getId());
 		
+		Link selfLink = SelfLinkHateoas.getLink(ItemResponseDTO.class, itemStockDTO.getId());
+		itemStockDTO.add(selfLink);
+
 		return itemStockDTO;
 		
 	}
@@ -122,6 +127,9 @@ public class ItemController {
 				.stream()
 				.map( item ->{
 					ItemDTO itemDTO = modelMapper.map(item, ItemDTO.class);
+					
+					Link selfLink = SelfLinkHateoas.getLink(ItemDTO.class, itemDTO.getId());
+					itemDTO.add(selfLink);
 					
 					return itemDTO;
 		}).collect(Collectors.toList());
