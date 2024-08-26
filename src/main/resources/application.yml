@@ -24,19 +24,29 @@ spring:
   main:
     allow-circular-references: true
 
-# Email local configuration
+# Email local configuration aws
+  #mail:
+    #host: email-smtp.us-west-2.amazonaws.com
+    #username: username
+    #password: password
+    #transport:
+      #protocol: smtp
+    #smtp:
+      #port: 25
+      #auth: true
+      #starttls:
+        #enable: true
+        #required: true
+
   mail:
-    host: email-smtp.us-west-2.amazonaws.com
-    username: username
-    password: password
-    transport:
-      protocol: smtp
+    host: localhost
+    port: 1025
+    username: "<test@gmail.com>"
+    password: "12345"
     smtp:
-      port: 25
-      auth: true
-      starttls:
-        enable: true
-        required: true
+      auth: false
+      starttls: 
+        enable: false
 
 # Swegger
   mvc:
@@ -50,3 +60,7 @@ security:
     chave-assinatura: 764811743f33067f36d72dd04ce22a27
   password:
     reset: http://localhost:8080/api/user/password/reset?token=
+  message:
+    change-password:
+      title: <h3> INSTRUÇÃO PARA REDEFINIR A SENHA! </h3>
+      body: <p> Siga as instruções abaixo para definir uma nova senha. Clica no link</p>

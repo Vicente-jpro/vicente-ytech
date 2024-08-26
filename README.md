@@ -5,6 +5,24 @@
 
 This project was with `Spring Boot version 2.7.16, Spring Security, Token JWT` and `JDK 1.8`
 
+### email server  
+
+Install smtp Maildev server 
+```sh
+npm install -g maildev
+```
+
+```sh
+maildev
+```
+
+By default, MailDev will listen on port 1025 for SMTP traffic and provide a web interface at `http://localhost:1080`.
+<br/>
+View Emails in MailDev: Open your browser and go to `http://localhost:1080` to see the email that was sent.
+<br/>
+Execute the jar file by running `java -jar ./target/vicente-ytech-0.0.1-SNAPSHOT.jar` then open your browser `http://localhost:8080/api/`. <br/>
+
+
 ### Development server
  
 Navegate inside `/vicente-ytech` folder. Open your terminal and run this command do create

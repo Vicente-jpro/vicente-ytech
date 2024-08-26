@@ -1,5 +1,6 @@
 package com.example.vicenteytech.controllers;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -28,8 +29,10 @@ import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.exceptions.SenhaInvalidaException;
 import com.example.vicenteytech.exceptions.UsuarioException;
 import com.example.vicenteytech.security.jwt.JwtService;
+import com.example.vicenteytech.service.EmailService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
 import com.example.vicenteytech.util.CurrentUser;
+import com.example.vicenteytech.util.TokenUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +47,8 @@ public class UsuarioController {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final ModelMapper modelMapper;
+    
+    private final EmailService emailService;
     
     @Value("${security.password.reset}")
     private String urlPasswordReset;
@@ -78,7 +83,7 @@ public class UsuarioController {
     }
     
     @PostMapping("/password/new")
-    public void passowrdNew(@RequestBody UserEmailDTO userEmail){
+    public void passowrdNew(@RequestBody UserEmailDTO userEmail) throws MessagingException{
         try{
             
         	UserModel usuario = new UserModel();
@@ -92,6 +97,9 @@ public class UsuarioController {
             this.usuarioService.salvar(usuarioAutenticado);
             
             //Send email to the user with this address.
+            emailService.sendEmailWithLink(usuarioAutenticado.getEmail(), "PASSWORD RESET INSTRUCTION",
+            		urlPasswordReset+tokenReceived.getToken());
+            
             System.out.println(urlPasswordReset+tokenReceived.getToken());
             
         } catch (UsernameNotFoundException | SenhaInvalidaException e ){
@@ -113,8 +121,11 @@ public class UsuarioController {
     						userPasswordRestDTO.getConfirmePassword());
     		
     		if(passwordEqual) {
-    		   String senhaCriptografada = passwordEncoder.encode(userPasswordRestDTO.getNewPassword());   		  
+    		   String senhaCriptografada = passwordEncoder.encode(userPasswordRestDTO.getNewPassword()); 
+    		   
+    		   user.setTokenResetPassword(TokenUtil.NO_TOKEN_GENERATED);
     		   user.setPassword(senhaCriptografada);
+
     		   this.usuarioService.salvar(user);
     		}else {
     			log.error("Password is diferent");
