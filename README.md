@@ -17,9 +17,9 @@ maildev
 ```
 
 By default, MailDev will listen on port 1025 for SMTP traffic and provide a web interface at `http://localhost:1080`.
-<br/>
+<br/><br/>
 View Emails in MailDev: Open your browser and go to `http://localhost:1080` to see the email that was sent.
-<br/>
+<br/><br/>
 Execute the jar file by running `java -jar ./target/vicente-ytech-0.0.1-SNAPSHOT.jar` then open your browser `http://localhost:8080/api/`. <br/>
 
 
