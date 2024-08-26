@@ -108,7 +108,9 @@ public class UsuarioController {
     	
     	if(tokenEquals) {
     		boolean passwordEqual = 
-    				user.isPasswordEquals(userPasswordRestDTO.getNewPassword(), userPasswordRestDTO.getConfirmePassword());
+    				user.isPasswordEquals(
+    						userPasswordRestDTO.getNewPassword(), 
+    						userPasswordRestDTO.getConfirmePassword());
     		
     		if(passwordEqual) {
     		   String senhaCriptografada = passwordEncoder.encode(userPasswordRestDTO.getNewPassword());   		  
