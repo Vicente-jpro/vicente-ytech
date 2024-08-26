@@ -1,8 +1,8 @@
 server:
-	port: 8080
+  port: 8080
   servlet:
-		context-path: /api
-		
+    context-path: /api
+
 # Data base Connection
 spring:
   datasource:
@@ -12,29 +12,41 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-		show-sql: true
-		generate-ddl: true
-		hibernate:
-			ddl-auto: update
-		properties:
-			hibernate:
-				jdbc:
-					lob:
-						non_contextual_creation: true
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
   main:
-		allow-circular-references: true
-		
+    allow-circular-references: true
+
+# Email local configuration
+  mail:
+    host: email-smtp.us-west-2.amazonaws.com
+    username: username
+    password: password
+    transport:
+      protocol: smtp
+    smtp:
+      port: 25
+      auth: true
+      starttls:
+        enable: true
+        required: true
+
 # Swegger
-	mvc:
+  mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
 
 # Spring Security and token JWT
 security:
-	jwt:
-		expiracao: 30
-		chave-assinatura: 764811743f33067f36d72dd04ce22a27
-	password:
-		reset: http://localhost:8080/api/user/password/reset?token=
-			
-		
+  jwt:
+    expiracao: 30
+    chave-assinatura: 764811743f33067f36d72dd04ce22a27
+  password:
+    reset: http://localhost:8080/api/user/password/reset?token=
