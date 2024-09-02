@@ -59,17 +59,22 @@ public class UsuarioController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO salvar( @RequestBody @Valid UserDTO userDTO ) throws MessagingException{
-        String senhaCriptografada = passwordEncoder.encode(userDTO.getPassword());
-        userDTO.setPassword(senhaCriptografada);
-        UserModel user = modelMapper.map(userDTO, UserModel.class);
-        String token = jwtService.gerarToken(user);
+    	 UserModel user = new UserModel();
+    	 
+    	boolean isPasswordEqual = user.isPasswordEquals(userDTO.getPassword(), userDTO.getPasswordConfirmed());
         
-        user.setActivated(false);
-        user.setTokenConfirmedAccount(token);
-        
-        UserModel userSaved = new UserModel();
-        boolean isPasswordEqual = user.isPasswordEquals(userDTO.getPassword(), userDTO.getPasswordConfirmed());
-        if(isPasswordEqual) {
+    	if(isPasswordEqual) {
+	    	String senhaCriptografada = passwordEncoder.encode(userDTO.getPassword());
+	        
+	        userDTO.setPassword(senhaCriptografada);
+	        user = modelMapper.map(userDTO, UserModel.class);
+	        String token = jwtService.gerarToken(user);
+	        
+	        user.setActivated(false);
+	        user.setTokenConfirmedAccount(token);
+	        
+	        UserModel userSaved = new UserModel();
+	     
             userSaved = usuarioService.salvar(user);
     
 	        //Send email to the user with this address.
@@ -131,14 +136,14 @@ public class UsuarioController {
     @PostMapping("/account/confirmed")
     public void accountConfirm(@RequestParam("token") String token){
     
-    	UserModel user = this.usuarioService.findByTokenResetPassword(token);
+    	UserModel user = this.usuarioService.findByTokenConfirmAccount(token);
     	if(user != null) {
     	   user.setActivated(true);
      	   this.usuarioService.salvar(user);
-    	}		
+    	}else {	
     	log.error("Password is diferent");
     	throw new UsuarioException("Password is diferent.");
-    	
+    	}
     }
     
     

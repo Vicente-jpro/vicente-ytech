@@ -51,14 +51,18 @@ public class UsuarioServiceImpl implements UserDetailsService {
     public UserDetails autenticar( UserModel usuario ){
     	log.info("Authenticating the user..."); 
         UserDetails user = loadUserByUsername(usuario.getEmail());
+        
+        CurrentUser currentUser = (CurrentUser) user;
+        
         boolean senhasIguais = encoder.matches( usuario.getPassword(), user.getPassword() );
-
+    
         if(senhasIguais){
-        	if(usuario.isActivated())
+        	if(currentUser.getUser().isActivated())
         		return user;
-        	
-            log.error("User Authenticatication: {} you must to activate your account using the link we sent by email.", usuario.getName());
-            throw new UsuarioException("User Authenticatication: You must to activate your account using the link we sent by email.");
+        	else {
+	            log.error("User Authenticatication: {} you must to activate your account using the link we sent by email.", usuario.getName());
+	            throw new UsuarioException("User Authenticatication: You must to activate your account using the link we sent by email.");
+        	}
         }
         log.error("User Authenticatication: Invalid credentials.");
         throw new SenhaInvalidaException();
