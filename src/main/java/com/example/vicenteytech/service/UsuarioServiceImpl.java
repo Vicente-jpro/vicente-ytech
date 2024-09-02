@@ -54,7 +54,11 @@ public class UsuarioServiceImpl implements UserDetailsService {
         boolean senhasIguais = encoder.matches( usuario.getPassword(), user.getPassword() );
 
         if(senhasIguais){
-            return user;
+        	if(usuario.isActivated())
+        		return user;
+        	
+            log.error("User Authenticatication: {} you must to activate your account using the link we sent by email.", usuario.getName());
+            throw new UsuarioException("User Authenticatication: You must to activate your account using the link we sent by email.");
         }
         log.error("User Authenticatication: Invalid credentials.");
         throw new SenhaInvalidaException();
@@ -85,6 +89,18 @@ public class UsuarioServiceImpl implements UserDetailsService {
         throw new UsernameNotFoundException("Token has expired.");
     }
 
+    
+    public UserModel findByTokenConfirmAccount(String token){
+    	log.info("Finding user by token to confirm account..."); 
+    	UserModel user = usuarioRepository.findByTokenConfirmedAccount(token);
+
+        if(user != null){
+            return user;
+        }
+
+    	log.error("Account confrirmation: Token has expired."); 
+        throw new UsernameNotFoundException("Account confrirmation: Token has expired.");
+    }
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

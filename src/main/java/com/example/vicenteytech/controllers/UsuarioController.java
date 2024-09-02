@@ -53,17 +53,36 @@ public class UsuarioController {
     @Value("${security.password.reset}")
     private String urlPasswordReset;
 
+    @Value("${security.account.confirmation}")
+    private String urlAccountConfirmation;
+    
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDTO salvar( @RequestBody @Valid UserDTO userDTO ){
+    public UserResponseDTO salvar( @RequestBody @Valid UserDTO userDTO ) throws MessagingException{
         String senhaCriptografada = passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword(senhaCriptografada);
         UserModel user = modelMapper.map(userDTO, UserModel.class);
-        UserModel userSaved = usuarioService.salvar(user);
+        String token = jwtService.gerarToken(user);
         
-        userDTO.setId(userSaved.getId());
-        UserResponseDTO useResponseDto = modelMapper.map(userDTO, UserResponseDTO.class);
-        return useResponseDto;
+        user.setActivated(false);
+        user.setTokenConfirmedAccount(token);
+        
+        UserModel userSaved = new UserModel();
+        boolean isPasswordEqual = user.isPasswordEquals(userDTO.getPassword(), userDTO.getPasswordConfirmed());
+        if(isPasswordEqual) {
+            userSaved = usuarioService.salvar(user);
+    
+	        //Send email to the user with this address.
+	        emailService.sendEmailWithLink(userSaved.getEmail(), "TOKEN INSTRUCTION TO CONFIRM ACCOUNT.",
+	        		urlAccountConfirmation+userSaved.getTokenConfirmedAccount());
+	        
+	        userDTO.setId(userSaved.getId());
+	        UserResponseDTO useResponseDto = modelMapper.map(userDTO, UserResponseDTO.class);
+	        return useResponseDto;
+        }
+        log.error("Confirmed password is diferent: {}", userDTO.getEmail());
+    	throw new UsuarioException("Password is diferent: "+ userDTO.getEmail());
+        
     }
 
     @PostMapping("/auth")
@@ -75,6 +94,7 @@ public class UsuarioController {
                     usuario.setPassword(credenciais.getPassword());
             
             UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);
+            
             String token = jwtService.gerarToken(usuario);
             return new TokenDTO(usuario.getEmail(), token);
         } catch (UsernameNotFoundException | SenhaInvalidaException e ){
@@ -107,6 +127,20 @@ public class UsuarioController {
         }
 
     }
+    
+    @PostMapping("/account/confirmed")
+    public void accountConfirm(@RequestParam("token") String token){
+    
+    	UserModel user = this.usuarioService.findByTokenResetPassword(token);
+    	if(user != null) {
+    	   user.setActivated(true);
+     	   this.usuarioService.salvar(user);
+    	}		
+    	log.error("Password is diferent");
+    	throw new UsuarioException("Password is diferent.");
+    	
+    }
+    
     
     @PostMapping("/password/reset")
     public void passowrdReset(@RequestBody UserPasswordRestDTO userPasswordRestDTO, @RequestParam("token") String token){

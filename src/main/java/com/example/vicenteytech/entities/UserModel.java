@@ -48,8 +48,15 @@ public class UserModel implements Serializable {
     @Column(name = "admin")
     private boolean admin;
     
+    @Column(name = "activated")
+    private boolean activated;
+    
     @Column(name = "token_reset_password")
     private String tokenResetPassword;
+    
+    @Column(name = "token_confirmed_account")
+    private String tokenConfirmedAccount;
+    
     
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

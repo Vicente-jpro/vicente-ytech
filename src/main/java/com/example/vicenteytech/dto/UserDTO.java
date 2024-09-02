@@ -25,6 +25,9 @@ public class UserDTO {
 	@JsonProperty("password")
     private String password;
 	
+	@JsonProperty("password_confirmed")
+    private String passwordConfirmed;
+	
 	@JsonProperty("admin")
     private boolean admin;
 }
