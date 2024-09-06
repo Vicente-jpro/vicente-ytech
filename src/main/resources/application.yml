@@ -6,7 +6,7 @@ server:
 # Data base Connection
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ytech
+    url: jdbc:postgresql://localhost:5432/service_pay
     username: postgres
     password: ${POSTGRES_VICENTE_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -58,10 +58,11 @@ security:
   jwt:
     expiracao: 30
     chave-assinatura: 764811743f33067f36d72dd04ce22a27
-  password:
-    reset: http://localhost:8080/api/user/password/reset?token=
-  account: 
-    confirmation: http://localhost:8080/api/user/account/confirmed?token=
+  url:
+    account:
+      reset: http://localhost:8080/api/user/password/reset?token=
+      confirmation:
+        send: http://localhost:8080/api/user/account/confirmed?token=
   message:
     change-password:
       title: <h3> INSTRUÇÃO PARA REDEFINIR A SENHA! </h3>
