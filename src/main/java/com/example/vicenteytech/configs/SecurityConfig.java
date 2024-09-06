@@ -2,6 +2,7 @@ package com.example.vicenteytech.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,7 @@ import com.example.vicenteytech.security.jwt.JwtAuthFilter;
 import com.example.vicenteytech.security.jwt.JwtService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -49,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
+            	.antMatchers("/swagger-ui/**")
+            		.permitAll()
                 .antMatchers("/items/**")
                     .hasAnyRole("USER", "ADMIN")
                 .antMatchers("/stock_movements/**")
