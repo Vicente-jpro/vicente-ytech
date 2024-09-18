@@ -67,7 +67,7 @@ public class UsuarioController {
     	@ApiResponse( code = 201, message = "User saved sussefully."),
     	@ApiResponse( code = 401, message = "")
     })
-    @PostMapping
+    @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO save( @RequestBody @Valid UserDTO userDTO ) throws MessagingException{
     	 UserModel user = new UserModel();
@@ -107,7 +107,7 @@ public class UsuarioController {
     	@ApiResponse( code = 201, message = "User saved sussefully."),
     	@ApiResponse( code = 401, message = "")
     })
-    @PostMapping("/account/confirmed/resend")
+    @PostMapping(path="/account/confirmed/resend", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void accountConfirmedResend( @RequestBody UserEmailDTO userEmail ) throws MessagingException{
     
@@ -154,7 +154,7 @@ public class UsuarioController {
     	@ApiResponse( code = 200, message = "User authenticated successfully."),
     	@ApiResponse( code = 401, message = "Can invalide credential or you need to verificate your account to access.")
     })
-    @PostMapping("/auth")
+    @PostMapping(path ="/auth", produces = "application/json", consumes = "application/json")
     public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais){
         try{
             
@@ -176,7 +176,7 @@ public class UsuarioController {
     	@ApiResponse( code = 200, message = "Instruction sent successfully."),
     	@ApiResponse( code = 401, message = "Cannot send the email instructions to create a new password.")
     })
-    @PostMapping("/password/new")
+    @PostMapping(path = "/password/new", consumes = "application/json")
     public void passowrdNew(@RequestBody UserEmailDTO userEmail) throws MessagingException{
         try{
             
@@ -208,7 +208,7 @@ public class UsuarioController {
     	@ApiResponse( code = 200, message = "Instruction sent successfully."),
     	@ApiResponse( code = 401, message = "Cannot send the email instructions to create a new password.")
     })
-    @PostMapping("/password/reset")
+    @PostMapping(path ="/password/reset", consumes = "application/json")
     public void passowrdReset(@RequestBody UserPasswordRestDTO userPasswordRestDTO, @RequestParam("token") String token){
     
     	UserModel user = this.usuarioService.findByTokenResetPassword(token);
