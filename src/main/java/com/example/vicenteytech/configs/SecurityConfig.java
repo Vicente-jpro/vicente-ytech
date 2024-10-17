@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,7 +22,7 @@ import com.example.vicenteytech.service.UsuarioServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig{
 
     @Autowired
     private UsuarioServiceImpl usuarioService;
@@ -45,30 +46,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .userDetailsService(usuarioService)
             .passwordEncoder(passwordEncoder());
     }
-
-    @Override
-    protected void configure( HttpSecurity http ) throws Exception {
+    
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests()
-            	.antMatchers("/swagger-ui/**")
-            		.permitAll()
-                .antMatchers("/items/**")
-                    .hasAnyRole("USER", "ADMIN")
-                .antMatchers("/stock_movements/**")
-                    .hasAnyRole("USER", "ADMIN")
-                .antMatchers("/orders/**")
-                	.hasAnyRole("USER", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/user/**")
-                    .permitAll()
-                .anyRequest().authenticated()
-            .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-                .addFilterBefore( jwtFilter(), UsernamePasswordAuthenticationFilter.class);
-        ;
-    }
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests((requests) -> requests
+                     .requestMatchers("/swagger-ui/**")
+                        .permitAll()
+                     .requestMatchers("/items/**")
+                        .hasAnyRole("USER", "ADMIN")
+                     .requestMatchers("/stock_movements/**")
+                        .hasAnyRole("USER", "ADMIN")
+                     .requestMatchers("/orders/**")
+                        .hasAnyRole("USER", "ADMIN")
+                     .requestMatchers(HttpMethod.POST, "/user/**")
+                        .permitAll()
+                     .anyRequest().authenticated()
+
+                )
+                .sessionManagement(management -> management
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {
