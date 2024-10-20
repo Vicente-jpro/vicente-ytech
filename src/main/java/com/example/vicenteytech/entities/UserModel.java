@@ -56,6 +56,10 @@ public class UserModel implements Serializable {
     @Column(name = "token_confirmed_account")
     private String tokenConfirmedAccount;
     
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Endereco> enderecos = new ArrayList<>();
     
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
