@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +16,7 @@ import com.example.vicenteytech.enums.StatusOrder;
 import com.example.vicenteytech.exceptions.OrderException;
 import com.example.vicenteytech.repositories.OrderRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

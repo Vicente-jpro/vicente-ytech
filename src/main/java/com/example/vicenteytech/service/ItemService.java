@@ -3,14 +3,13 @@ package com.example.vicenteytech.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import com.example.vicenteytech.entities.Item;
 import com.example.vicenteytech.exceptions.ItemException;
 import com.example.vicenteytech.repositories.ItemRespository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

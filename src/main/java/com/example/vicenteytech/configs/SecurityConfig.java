@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +22,8 @@ import com.example.vicenteytech.service.UsuarioServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig{
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class SecurityConfig extends GlobalMethodSecurityConfiguration{
 
     @Autowired
     private UsuarioServiceImpl usuarioService;
@@ -39,7 +40,8 @@ public class SecurityConfig{
     public OncePerRequestFilter jwtFilter(){
         return new JwtAuthFilter(jwtService, usuarioService);
     }
-
+  
+    
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -60,6 +62,7 @@ public class SecurityConfig{
                         .hasAnyRole("USER", "ADMIN")
                      .requestMatchers("/orders/**")
                         .hasAnyRole("USER", "ADMIN")
+                     .requestMatchers("/user/auth").permitAll()
                      .requestMatchers(HttpMethod.POST, "/user/**")
                         .permitAll()
                      .anyRequest().authenticated()
@@ -72,7 +75,7 @@ public class SecurityConfig{
 		return http.build();
 	}
 
-
+/*
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
@@ -83,4 +86,5 @@ public class SecurityConfig{
                 "/swagger-ui.html",
                 "/webjars/**");
     }
+    */
 }

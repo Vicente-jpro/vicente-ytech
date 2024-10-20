@@ -3,8 +3,6 @@ package com.example.vicenteytech.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +13,7 @@ import com.example.vicenteytech.entities.StockMovement;
 import com.example.vicenteytech.exceptions.StockMovementException;
 import com.example.vicenteytech.repositories.StockMovementRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
