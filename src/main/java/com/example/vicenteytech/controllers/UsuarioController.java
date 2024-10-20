@@ -1,8 +1,5 @@
 package com.example.vicenteytech.controllers;
 
-import javax.mail.MessagingException;
-import javax.validation.Valid;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -34,14 +31,14 @@ import com.example.vicenteytech.service.UsuarioServiceImpl;
 import com.example.vicenteytech.util.CurrentUser;
 import com.example.vicenteytech.util.TokenUtil;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ApiOperation("User Authentication")
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -61,12 +58,13 @@ public class UsuarioController {
     private String urlAccountConfirmation;
     
     
-        	  
-    @ApiOperation("Save a user and send email to confirm account.")
+  /*      	  
+    @Operation("Save a user and send email to confirm account.")
     @ApiResponses({
     	@ApiResponse( code = 201, message = "User saved sussefully."),
     	@ApiResponse( code = 401, message = "")
     })
+    */
     @PostMapping(produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO save( @RequestBody @Valid UserDTO userDTO ) throws MessagingException{
@@ -101,12 +99,12 @@ public class UsuarioController {
         
     }
     
-    
+    /*
     @ApiOperation("Resend account confirmed email to confirm account.")
     @ApiResponses({
     	@ApiResponse( code = 201, message = "User saved sussefully."),
     	@ApiResponse( code = 401, message = "")
-    })
+    }) */
     @PostMapping(path="/account/confirmed/resend", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     public void accountConfirmedResend( @RequestBody UserEmailDTO userEmail ) throws MessagingException{
@@ -130,11 +128,12 @@ public class UsuarioController {
         
     }
     
+    /*
     @ApiOperation("Confirme account created")
     @ApiResponses({
     	@ApiResponse( code = 200, message = "Account confirmated successfully."),
     	@ApiResponse( code = 401, message = "Can not confirme your account. Token does not exit.")
-    })
+    })*/
     @PostMapping("/account/confirmed")
     public void accountConfirm(@RequestParam("token") String token){
     
@@ -148,12 +147,13 @@ public class UsuarioController {
     	}
     }
     
-
+/*
     @ApiOperation("Authenticate the user and return a token to access API resourses.")
     @ApiResponses({
     	@ApiResponse( code = 200, message = "User authenticated successfully."),
     	@ApiResponse( code = 401, message = "Can invalide credential or you need to verificate your account to access.")
     })
+    */
     @PostMapping(path ="/auth", produces = "application/json", consumes = "application/json")
     public TokenDTO autenticar(@RequestBody CredenciaisDTO credenciais){
         try{
@@ -170,12 +170,13 @@ public class UsuarioController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    
+    /*
     @ApiOperation("Verify if user exist and send the reset password instructions.")
     @ApiResponses({
     	@ApiResponse( code = 200, message = "Instruction sent successfully."),
     	@ApiResponse( code = 401, message = "Cannot send the email instructions to create a new password.")
     })
+    */
     @PostMapping(path = "/password/new", consumes = "application/json")
     public void passowrdNew(@RequestBody UserEmailDTO userEmail) throws MessagingException{
         try{
@@ -203,11 +204,13 @@ public class UsuarioController {
     }
     
 
+    /*
     @ApiOperation("Verify if user TokenResetPassword exist and change the password.")
     @ApiResponses({
     	@ApiResponse( code = 200, message = "Instruction sent successfully."),
     	@ApiResponse( code = 401, message = "Cannot send the email instructions to create a new password.")
     })
+    */
     @PostMapping(path ="/password/reset", consumes = "application/json")
     public void passowrdReset(@RequestBody UserPasswordRestDTO userPasswordRestDTO, @RequestParam("token") String token){
     

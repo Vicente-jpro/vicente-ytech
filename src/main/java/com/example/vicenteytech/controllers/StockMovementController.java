@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,9 +18,6 @@ import com.example.vicenteytech.dto.StockMovementDTO;
 import com.example.vicenteytech.entities.StockMovement;
 import com.example.vicenteytech.service.StockMovementService;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,11 +28,13 @@ public class StockMovementController {
 	private final StockMovementService stockMovementService;
 	private final ModelMapper modelMapper;
 
+	/*
 	@PostMapping
 	@ApiOperation("Save an Stock Movement")
-	@ResponseStatus(HttpStatus.CREATED)
 	@ApiResponses({ @ApiResponse(code = 201, message = "Stock Movement saved successfully."),
 			@ApiResponse(code = 400, message = "Could not save the Stock Movement.") })
+	*/
+	@ResponseStatus(HttpStatus.CREATED)
 	public StockMovementDTO save(@RequestBody StockMovementDTO stockMovementDTO) {
 
 		StockMovement stock = stockMovementService.save(stockMovementDTO);
@@ -46,10 +44,10 @@ public class StockMovementController {
 	}
 
 	@PatchMapping("/{id_stock}")
-	@ApiOperation("Update Stock Movement with id.")
-	@ResponseStatus(HttpStatus.CREATED)
-	@ApiResponses({ @ApiResponse(code = 201, message = "Stock Movement saved successfully."),
-			@ApiResponse(code = 400, message = "Could not update the Stock Movement.") })
+//	@ApiOperation("Update Stock Movement with id.")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	@ApiResponses({ @ApiResponse(code = 201, message = "Stock Movement saved successfully."),
+//			@ApiResponse(code = 400, message = "Could not update the Stock Movement.") })
 	public StockMovementDTO update(@RequestBody StockMovementDTO stockMovementDTO,
 			@PathVariable("id_stock") Long idStockMovementDTO) {
 
@@ -60,10 +58,11 @@ public class StockMovementController {
 	}
 
 	@GetMapping("/{id_stock}")
-	@ApiOperation("Get an Stock Movement with id.")
+//	@ApiOperation("Get an Stock Movement with id.")
+//	
+//	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement saved successfully."),
+//			@ApiResponse(code = 400, message = "Stock Movement do not exist.") })
 	@ResponseStatus(HttpStatus.OK)
-	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement saved successfully."),
-			@ApiResponse(code = 400, message = "Stock Movement do not exist.") })
 	public StockMovementDTO getStockMovementDTOById(@PathVariable("id_stock") Long idStockMovementDTO) {
 
 		StockMovement stock = stockMovementService.getStockMovementById(idStockMovementDTO);
@@ -73,9 +72,10 @@ public class StockMovementController {
 	}
 
 	@GetMapping
-	@ApiOperation("Get all Stock Movement.")
+//	@ApiOperation("Get all Stock Movement.")
+//	
+//	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement got successfully."), })
 	@ResponseStatus(HttpStatus.OK)
-	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement got successfully."), })
 	public List<StockMovementDTO> getStockMovements() {
 
 		return stockMovementService.getStockMovements().stream().map(itemStok -> {
@@ -88,10 +88,10 @@ public class StockMovementController {
 	}
 
 	@DeleteMapping("/{id_stock}")
-	@ApiOperation("Update Stock Movement with id.")
+//	@ApiOperation("Update Stock Movement with id.")
+//	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement Deleted successfully."),
+//			@ApiResponse(code = 400, message = "Error on deleting Stock Movement.") })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@ApiResponses({ @ApiResponse(code = 200, message = "Stock Movement Deleted successfully."),
-			@ApiResponse(code = 400, message = "Error on deleting Stock Movement.") })
 	public void deleteById(@PathVariable("id_stock") Long idStockMovementDTO) {
 
 		stockMovementService.delete(idStockMovementDTO);

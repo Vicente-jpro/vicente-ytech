@@ -6,12 +6,10 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,17 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.vicenteytech.dto.OrderDTO;
 import com.example.vicenteytech.dto.UserResponseDTO;
 import com.example.vicenteytech.entities.Order;
-import com.example.vicenteytech.entities.UserModel;
 import com.example.vicenteytech.enums.StatusOrder;
-import com.example.vicenteytech.repositories.OrderRepository;
 import com.example.vicenteytech.service.OrderService;
 import com.example.vicenteytech.service.UsuarioServiceImpl;
 import com.example.vicenteytech.util.CurrentUser;
 import com.example.vicenteytech.util.LoggedInUser;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -42,11 +35,13 @@ public class OrderController {
 	private final ModelMapper modelMapper;
 	private final UsuarioServiceImpl usuarioServiceImpl;
 	
+	/*
 	@PostMapping
 	@ApiOperation("Save an Order")
-	@ResponseStatus(HttpStatus.CREATED)
 	@ApiResponses({ @ApiResponse(code = 201, message = "Order was saved successfully."),
 			@ApiResponse(code = 400, message = "Could not save the Order.") })
+	*/
+	@ResponseStatus(HttpStatus.CREATED)
 	public OrderDTO save(@RequestBody OrderDTO orderDTO, @LoggedInUser CurrentUser currentUser) {
 
 		UserResponseDTO userDTO = UserResponseDTO.builder().id(currentUser.getUser().getId()).build();
@@ -66,10 +61,13 @@ public class OrderController {
 	}
 
 	@PatchMapping("/{id_order}")
+	/*
 	@ApiOperation("Update Order with id.")
-	@ResponseStatus(HttpStatus.CREATED)
+	
 	@ApiResponses({ @ApiResponse(code = 201, message = "Order was saved successfully."),
 			@ApiResponse(code = 400, message = "Could not update the Order.") })
+			*/
+	@ResponseStatus(HttpStatus.CREATED)
 	public OrderDTO update(@RequestBody OrderDTO orderDTO, @PathVariable("id_order") Long idOrder,
 			@LoggedInUser CurrentUser currentUser) {
 
@@ -86,11 +84,14 @@ public class OrderController {
 		return stockDTO;
 	}
 	
+	
 	@PatchMapping("/{id_order}/complete")
+	/*
 	@ApiOperation("Update Order with id.")
-	@ResponseStatus(HttpStatus.CREATED)
 	@ApiResponses({ @ApiResponse(code = 201, message = "Order was saved successfully."),
 			@ApiResponse(code = 400, message = "Could not update the Order.") })
+	*/
+	@ResponseStatus(HttpStatus.CREATED)
 	public OrderDTO completeOrder(@RequestBody OrderDTO orderDTO, @PathVariable("id_order") Long idOrder,
 			@LoggedInUser CurrentUser currentUser) {
 
@@ -109,10 +110,13 @@ public class OrderController {
 	}
 
 	@GetMapping("/{id_order}")
+	/*
 	@ApiOperation("Get an Order with id.")
-	@ResponseStatus(HttpStatus.OK)
+	
 	@ApiResponses({ @ApiResponse(code = 200, message = "Order was saved successfully."),
 			@ApiResponse(code = 400, message = "Order do not exist.") })
+	*/
+	@ResponseStatus(HttpStatus.OK)
 	public OrderDTO getOrderById(@PathVariable("id_order") Long idOrder) {
 
 		Order stock = orderService.getOrderById(idOrder);
@@ -122,9 +126,11 @@ public class OrderController {
 	}
 	
 	@GetMapping()
+	/*
 	@ApiOperation("Get all Order by current_user.")
-	@ResponseStatus(HttpStatus.OK)
 	@ApiResponse(code = 200, message = "Order was saved successfully.")
+	*/
+	@ResponseStatus(HttpStatus.OK)
 	public List<OrderDTO> getOrders() {
 
 		return orderService.getOrders()
@@ -136,10 +142,12 @@ public class OrderController {
 	}
 
 	@DeleteMapping("/{id_order}")
+	/*
 	@ApiOperation("Update Order with id.")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiResponses({ @ApiResponse(code = 200, message = "Order was Deleted successfully."),
 			@ApiResponse(code = 400, message = "Error on deleting Order.") })
+	*/
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable("id_order") Long idOrder) {
 
 		orderService.delete(idOrder);
@@ -147,11 +155,11 @@ public class OrderController {
 	
 	
 	@GetMapping("/user")
-	@ApiOperation("Find orders by users.")
-	@ApiResponses({
-		@ApiResponse(code = 200, message = "Find orders by user"),
-		@ApiResponse(code = 400, message = "this user never created an order not.")
-	})
+//	@ApiOperation("Find orders by users.")
+//	@ApiResponses({
+//		@ApiResponse(code = 200, message = "Find orders by user"),
+//		@ApiResponse(code = 400, message = "this user never created an order not.")
+//	})
 	public List<OrderDTO> getOrdersByUser(Authentication authentication) {
 		CurrentUser user = modelMapper.map(authentication.getPrincipal(), CurrentUser.class);
 		

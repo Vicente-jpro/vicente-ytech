@@ -6,7 +6,7 @@ server:
 # Data base Connection
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/service_pay
+    url: jdbc:postgresql://localhost:5432/ytech
     username: postgres
     password: ${POSTGRES_VICENTE_PASSWORD}
     driver-class-name: org.postgresql.Driver

@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vicenteytech.dto.ItemDTO;
@@ -28,9 +26,6 @@ import com.example.vicenteytech.service.ItemService;
 import com.example.vicenteytech.service.StockMovementService;
 import com.example.vicenteytech.util.SelfLinkHateoas;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 
@@ -45,12 +40,14 @@ public class ItemController {
 	private final ModelMapper modelMapper;
 	
 	@PostMapping
+	/*
 	@ApiOperation("Save an ItemDTO")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiResponses({
 		@ApiResponse(code = 201, message = "ItemDTO saved successfully."),
 		@ApiResponse(code = 400, message = "Could not save the item." )
 	})
+	*/
 	public ItemResponseDTO salvar(@RequestBody ItemRequestDTO itemRequestDTO) {
 		
 		Item item = modelMapper.map(itemRequestDTO.getItem(), Item.class);
@@ -69,12 +66,14 @@ public class ItemController {
 	}
 	
 	@PatchMapping("/{id_item}")
+	/*
 	@ApiOperation("Update item with id.")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiResponses({
 		@ApiResponse(code = 201, message = "ItemDTO saved successfully."),
 		@ApiResponse(code = 400, message = "Could not update the item.")
 	})
+	*/
 	public ItemResponseDTO update(@RequestBody ItemRequestDTO itemRequestDTO, @PathVariable("id_item") Long idItem) {
 		
 		Item item = modelMapper.map(itemRequestDTO.getItem(), Item.class);
@@ -100,12 +99,14 @@ public class ItemController {
 	
 	
 	@GetMapping("/{id_item}")
+	/*
 	@ApiOperation("Get an item with id.")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "ItemDTO saved successfully."),
 		@ApiResponse(code = 400, message = "ItemDTO do not exist.")
 	})
+	*/
 	public ItemDTO getItemDTOById(@PathVariable("id_item") Long idItem) {
 		
 		Item itemSaved =  itemService.getItemById(idItem);
@@ -115,12 +116,14 @@ public class ItemController {
 	}
 	
 	@GetMapping()
+	/*
 	@ApiOperation("Get all item with id.")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "ItemDTO saved successfully."),
 		@ApiResponse(code = 400, message = "ItemDTO do not exist.")
 	})
+	*/
 	public List<ItemDTO> getItems() {
 		
 		return itemService.getItems()
@@ -136,12 +139,14 @@ public class ItemController {
 	}
 	
 	@DeleteMapping("/{id_item}")
+	/*
 	@ApiOperation("Update item with id.")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "ItemDTO Deleted successfully."),
 		@ApiResponse(code = 400, message = "Error on deleting item.")
 	})
+	*/
 	public void deleteById(@PathVariable("id_item") Long idItemDTO) {
 		
 		itemService.delete(idItemDTO);
